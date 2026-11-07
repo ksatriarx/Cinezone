@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CineZone — Nonton Film & Series Streaming Sub Indo</title>
 <meta name="description" content="CineZone — Streaming film dan series terbaru sub Indo kualitas HD. Drama Korea, anime, film barat & Asia lengkap.">
+<meta property="og:title" content="CineZone — Nonton Film & Series Streaming Sub Indo">
+<meta property="og:description" content="Streaming film dan series terbaru sub Indo kualitas HD.">
+<meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23a70836'/><polygon points='35,25 75,50 35,75' fill='white'/></svg>">
 <style>
 :root{
@@ -105,8 +108,7 @@ ul{list-style:none}
 .dropdown-menu.right{left:auto;right:0}
 .menu-2-col{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
 
-/* Mobile nav */
-.mobile-toggle{display:none;color:#fff;padding:8px}
+.mobile-toggle{display:none;color:#fff;padding:8px;font-size:1.3rem}
 .mobile-nav{
   position:fixed;inset:0;z-index:300;
   background:var(--bg);transform:translateX(-100%);
@@ -124,7 +126,7 @@ ul{list-style:none}
 .mobile-submenu{padding-left:14px}
 .mobile-submenu a{display:block;padding:9px 12px;color:var(--text-dim);font-size:.9rem}
 
-/* ============ SUB NAV (genre chips) ============ */
+/* ============ SUB NAV ============ */
 .sub-header{
   background:var(--bg-alt);border-bottom:1px solid var(--border);
   overflow-x:auto;
@@ -138,8 +140,180 @@ ul{list-style:none}
 }
 .scroll-nav a:hover{background:var(--accent);color:#fff}
 
-/* ============ HERO SLIDER ============ */
-.featured{padding:28px 0 8px}
+/* ============ HERO CINEMATIC ============ */
+.hero{
+  position:relative;
+  height:clamp(520px, 78vh, 720px);
+  overflow:hidden;
+  background:#000;
+  margin-bottom:40px;
+}
+.hero-slide{
+  position:absolute;inset:0;
+  opacity:0;
+  transition:opacity .9s ease;
+  pointer-events:none;
+}
+.hero-slide.active{opacity:1;pointer-events:auto}
+.hero-backdrop{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg, #1a0a15, #0d0d12);
+  background-size:cover;
+  background-position:center top;
+  transform:scale(1.03);
+}
+.hero-overlay{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(to top, var(--bg) 0%, transparent 65%),
+    linear-gradient(to right, rgba(13,13,18,.95) 0%, rgba(13,13,18,.55) 45%, transparent 75%);
+}
+.hero-content{
+  position:relative;
+  height:100%;
+  max-width:1280px;
+  margin:0 auto;
+  padding:80px 20px 80px;
+  display:flex;
+  align-items:center;
+  gap:36px;
+}
+.hero-poster{
+  display:none;
+  flex-shrink:0;
+  width:230px;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 24px 60px rgba(0,0,0,.75), 0 0 0 2px rgba(255,255,255,.08);
+  transform:translateY(20px) rotate(-1deg);
+  opacity:0;
+  transition:.7s cubic-bezier(.2,.7,.3,1) .2s;
+}
+.hero-slide.active .hero-poster{opacity:1;transform:translateY(0) rotate(0)}
+.hero-poster img{width:100%;height:auto;display:block}
+.hero-info{
+  flex:1;max-width:600px;color:#fff;
+  transform:translateY(24px);opacity:0;
+  transition:.6s ease;
+}
+.hero-slide.active .hero-info{
+  opacity:1;transform:translateY(0);
+  transition-delay:.15s;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 14px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  border-radius:999px;
+  font-size:.68rem;font-weight:800;letter-spacing:.8px;
+  margin-bottom:16px;
+  box-shadow:0 4px 20px rgba(224,16,80,.4);
+}
+.hero-title{
+  font-size:clamp(1.7rem, 5.5vw, 3rem);
+  font-weight:900;line-height:1.05;
+  letter-spacing:-.5px;margin-bottom:14px;
+  text-shadow:0 4px 24px rgba(0,0,0,.6);
+}
+.hero-meta{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+  font-size:.82rem;color:#cfcfd9;margin-bottom:16px;
+}
+.hero-meta .star{
+  color:#ffd233;font-weight:800;
+  display:flex;align-items:center;gap:4px;font-size:.9rem;
+}
+.hero-meta .dot{width:3px;height:3px;background:#555;border-radius:50%}
+.hero-meta .tag{
+  padding:3px 9px;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:5px;
+  font-size:.68rem;font-weight:600;color:#e0e0e8;
+}
+.hero-synopsis{
+  font-size:.9rem;line-height:1.65;color:#b8b8c6;
+  margin-bottom:22px;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
+  overflow:hidden;max-width:520px;
+}
+.hero-actions{display:flex;flex-wrap:wrap;gap:10px}
+.hero-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 26px;border-radius:9px;
+  font-size:.85rem;font-weight:800;letter-spacing:.3px;
+  transition:.2s;min-height:46px;cursor:pointer;
+}
+.hero-btn.primary{
+  background:#fff;color:#111;
+  box-shadow:0 8px 24px rgba(255,255,255,.15);
+}
+.hero-btn.primary:hover{background:#f0f0f0;transform:translateY(-2px)}
+.hero-btn.secondary{
+  background:rgba(255,255,255,.12);color:#fff;
+  backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.15);
+}
+.hero-btn.secondary:hover{
+  background:rgba(255,255,255,.22);transform:translateY(-2px);
+}
+.hero-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:46px;height:46px;border-radius:50%;
+  background:rgba(0,0,0,.55);
+  backdrop-filter:blur(10px);
+  color:#fff;font-size:1.5rem;
+  display:flex;align-items:center;justify-content:center;
+  z-index:10;transition:.2s;
+  border:1px solid rgba(255,255,255,.15);
+  line-height:1;padding-bottom:3px;
+}
+.hero-arrow:hover{
+  background:var(--accent);border-color:var(--accent);
+  transform:translateY(-50%) scale(1.08);
+}
+.hero-arrow.prev{left:16px}
+.hero-arrow.next{right:16px}
+.hero-dots{
+  position:absolute;bottom:24px;left:50%;
+  transform:translateX(-50%);
+  display:flex;gap:8px;z-index:10;
+}
+.hero-dot{
+  width:9px;height:9px;border-radius:50%;
+  background:rgba(255,255,255,.3);
+  transition:.3s;cursor:pointer;border:none;padding:0;
+}
+.hero-dot.active{
+  width:32px;border-radius:5px;background:var(--accent-2);
+}
+
+/* ============ SLIDER SECTION ============ */
+.widget{margin:36px 0}
+.widget .header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;
+}
+.widget .header h2{
+  font-size:1.15rem;font-weight:800;letter-spacing:.4px;
+  position:relative;padding-left:14px;
+}
+.widget .header h2::before{
+  content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:5px;height:22px;border-radius:3px;
+  background:linear-gradient(var(--accent),var(--accent-2));
+}
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--accent);color:#fff;
+  padding:9px 18px;border-radius:8px;
+  font-size:.8rem;font-weight:700;letter-spacing:.4px;
+  transition:.2s;
+}
+.btn:hover{background:var(--accent-2)}
+.btn-small{padding:7px 14px;font-size:.72rem}
+.btn-secondary{background:var(--card);color:var(--text-dim)}
+.btn-secondary:hover{background:var(--card-hover);color:#fff}
+
 .slider-wrapper{position:relative}
 .sliders{
   display:flex;gap:14px;overflow-x:auto;scroll-behavior:smooth;
@@ -147,24 +321,20 @@ ul{list-style:none}
 }
 .sliders::-webkit-scrollbar{display:none}
 
-.slider-wrapper.hero .slider{flex:0 0 46%;max-width:46%}
-@media(min-width:900px){.slider-wrapper.hero .slider{flex:0 0 23%;max-width:23%}}
-@media(max-width:640px){.slider-wrapper.hero .slider{flex:0 0 70%;max-width:70%}}
-
 .scroll-btn{
   position:absolute;top:50%;transform:translateY(-50%);
   width:40px;height:40px;border-radius:50%;
-  background:rgba(10,10,15,.8);border:1px solid var(--border);
+  background:rgba(10,10,15,.85);border:1px solid var(--border);
   color:#fff;display:grid;place-items:center;
   font-size:1.1rem;z-index:5;transition:.2s;
 }
 .scroll-btn:hover{background:var(--accent)}
 .scroll-btn.scroll-left{left:-14px}
 .scroll-btn.scroll-right{right:-14px}
-.scroll-btn.hidden{opacity:0;visibility:hidden}
+.scroll-btn.hidden{opacity:0;visibility:hidden;pointer-events:none}
 
 /* ============ MOVIE CARD ============ */
-.movie-card{position:relative}
+.movie-card{position:relative;width:170px;flex-shrink:0}
 .movie-card .poster{
   position:relative;border-radius:var(--radius);
   overflow:hidden;aspect-ratio:2/3;background:var(--card);
@@ -194,61 +364,45 @@ ul{list-style:none}
 .badge.episode{bottom:8px;right:8px;background:rgba(0,0,0,.72);color:#fff;font-size:.62rem}
 
 .movie-info{padding:10px 4px 0}
-.movie-info .genre{font-size:.72rem;color:var(--accent-2);font-weight:600;margin-bottom:2px;text-transform:uppercase;letter-spacing:.3px}
+.movie-info .genre{
+  font-size:.7rem;color:var(--accent-2);font-weight:600;
+  margin-bottom:2px;text-transform:uppercase;letter-spacing:.3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
 .movie-info .title{
   font-size:.86rem;font-weight:600;color:var(--text);
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
   overflow:hidden;line-height:1.3;
 }
 
-/* ============ SECTION ============ */
-.widget{margin:36px 0}
-.widget .header{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:16px;
-}
-.widget .header h2{
-  font-size:1.15rem;font-weight:800;letter-spacing:.4px;
-  position:relative;padding-left:14px;
-}
-.widget .header h2::before{
-  content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);
-  width:5px;height:22px;border-radius:3px;
-  background:linear-gradient(var(--accent),var(--accent-2));
-}
-.btn{
-  display:inline-flex;align-items:center;gap:6px;
-  background:var(--accent);color:#fff;
-  padding:9px 18px;border-radius:8px;
-  font-size:.8rem;font-weight:700;letter-spacing:.4px;
-  transition:.2s;
-}
-.btn:hover{background:var(--accent-2)}
-.btn-small{padding:7px 14px;font-size:.72rem}
-.btn-secondary{background:var(--card);color:var(--text-dim)}
-.btn-secondary:hover{background:var(--card-hover);color:#fff}
-
-/* ============ CONTINUE WATCHING BAR ============ */
+/* ============ WATCH BAR ============ */
 .watch-bar{
   background:var(--bg-alt);border:1px solid var(--border);
   border-radius:var(--radius);margin:16px 0;overflow:hidden;
 }
 .watch-bar-toggle{
   display:flex;align-items:center;justify-content:space-between;
-  padding:14px 18px;font-weight:700;font-size:.9rem;
+  width:100%;padding:14px 18px;
+  font-weight:700;font-size:.9rem;text-align:left;
 }
 .watch-bar-toggle:hover{background:var(--card)}
 .watch-bar-toggle::after{content:"▾";color:var(--text-dim)}
 .watch-wrapper{padding:0 18px 18px;display:none}
 .watch-wrapper.open{display:block}
-.watch-empty{text-align:center;color:var(--text-dim);padding:24px;font-size:.85rem}
+.watch-empty{
+  text-align:center;color:var(--text-dim);
+  padding:24px;font-size:.85rem;
+}
 
 /* ============ FILTER ============ */
 .filter-menu{
   background:var(--card);border:1px solid var(--border);
   border-radius:var(--radius);padding:20px;margin-bottom:20px;
 }
-.form-filter{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.form-filter{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+}
 .form-group select{
   width:100%;padding:10px 14px;border-radius:8px;
   background:var(--bg-alt);border:1px solid var(--border);
@@ -265,11 +419,18 @@ ul{list-style:none}
 .footer-grid{
   display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:30px;
 }
-@media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr;gap:24px}}
-.footer-brand p{color:var(--text-dim);font-size:.85rem;margin-top:12px;max-width:320px}
-.footer-col h4{font-size:.85rem;font-weight:700;margin-bottom:14px;color:#fff}
+.footer-brand p{
+  color:var(--text-dim);font-size:.85rem;
+  margin-top:12px;max-width:320px;
+}
+.footer-col h4{
+  font-size:.85rem;font-weight:700;
+  margin-bottom:14px;color:#fff;
+}
 .footer-col ul li{margin-bottom:8px}
-.footer-col ul li a{color:var(--text-dim);font-size:.82rem;transition:.2s}
+.footer-col ul li a{
+  color:var(--text-dim);font-size:.82rem;transition:.2s;
+}
 .footer-col ul li a:hover{color:var(--accent-2)}
 .footer-bottom{
   border-top:1px solid var(--border);margin-top:32px;padding-top:20px;
@@ -288,9 +449,22 @@ ul{list-style:none}
   .navbar-nav,.form-search.desk{display:none}
   .mobile-toggle{display:block}
   .navbar{gap:14px}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:24px}
+  .hero-content{
+    padding:70px 20px 80px;
+    align-items:flex-end;
+  }
+  .hero-poster{display:none}
+}
+@media(max-width:640px){
+  .hero-arrow{display:none}
+  .hero-title{font-size:1.9rem}
+  .hero-btn{padding:11px 20px;font-size:.8rem}
 }
 @media(max-width:520px){
   .widget .header h2{font-size:1rem}
+  .movie-card{width:135px}
+  .footer-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -465,19 +639,13 @@ ul{list-style:none}
 </div>
 
 <main class="site-content">
-  <!-- ============ HERO / FEATURED ============ -->
-  <section class="featured">
-    <div class="container">
-      <div class="widget header" style="margin-top:0;margin-bottom:14px">
-        <h2>Film Unggulan</h2>
-        <a href="#" class="btn btn-small">LIHAT SEMUA</a>
-      </div>
-      <div class="slider-wrapper hero">
-        <button class="scroll-btn scroll-left hidden" aria-label="Kiri">❮</button>
-        <button class="scroll-btn scroll-right" aria-label="Kanan">❯</button>
-        <ul class="sliders" id="heroSlider"></ul>
-      </div>
-    </div>
+
+  <!-- ============ HERO CINEMATIC ============ -->
+  <section class="hero">
+    <div class="hero-slides" id="heroSlides"></div>
+    <button class="hero-arrow prev" id="heroPrev" aria-label="Sebelumnya">‹</button>
+    <button class="hero-arrow next" id="heroNext" aria-label="Berikutnya">›</button>
+    <div class="hero-dots" id="heroDots"></div>
   </section>
 
   <!-- ============ CONTINUE WATCHING ============ -->
@@ -659,88 +827,122 @@ ul{list-style:none}
 </footer>
 
 <script>
-/* ========== DATA CONTOH ========== */
-const IMG = (seed) => `https://picsum.photos/seed/${seed}/400/600`;
-
-const heroData = [
-  { title:"Doctor X: Age of the White Mafia", year:2026, rating:9.5, eps:9,  genre:"Drama, Mystery" },
-  { title:"The Remarried Empress",            year:2026, rating:9.5, eps:4,  genre:"Drama, Fantasy" },
-  { title:"The Odyssey",                      year:2026, rating:7.7, hd:1,   genre:"Adventure, Drama" },
-  { title:"Dead-End Job",                     year:2026, rating:9.2, eps:8,  genre:"Horror, Mystery" },
-  { title:"Heart of the Beast",               year:2026, rating:7.2, hd:1,   genre:"Action, Drama" },
-  { title:"Resident Evil",                    year:2026, rating:7.8, hd:1,   genre:"Action, Sci-Fi" },
-  { title:"Apocalypse Z: New World",          year:2026, rating:8.0, hd:1,   genre:"Horror, Thriller" },
-  { title:"When I Meet the Moon",             year:2026, rating:9.3, eps:8,  genre:"Drama, Romance" }
-];
-
+/* ============ DATA FILM ============ */
 const latestMovies = [
-  { title:"It's Nice in Here",   year:2022, rating:7.3, genre:"Animation, Short" },
-  { title:"Candle in the Tomb",  year:2023, rating:5.2, genre:"Action, Adventure" },
-  { title:"All Wishes Come True",year:2026, rating:8.0, genre:"Animation, Adventure" },
-  { title:"The Odyssey",         year:2026, rating:7.7, genre:"Drama, Adventure" },
-  { title:"Possible Love",       year:2026, rating:8.1, genre:"Drama, Romance" },
-  { title:"Musk",                year:2026, rating:7.4, genre:"Documentary" },
-  { title:"Sisa",                year:2025, rating:7.5, genre:"Drama, History" },
-  { title:"A Prayer for the Dying", year:2026, rating:6.1, genre:"Drama, Western" }
+  { title:"Spider-Man: No Way Home", year:2021, rating:8.2, genre:"Action, Adventure", img:"https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg" },
+  { title:"John Wick: Chapter 4", year:2023, rating:7.7, genre:"Action, Thriller", img:"https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg" },
+  { title:"Oppenheimer", year:2023, rating:8.1, genre:"Biography, Drama", img:"https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg" },
+  { title:"Dune: Part Two", year:2024, rating:8.5, genre:"Sci-Fi, Adventure", img:"https://image.tmdb.org/t/p/w500/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg" },
+  { title:"The Batman", year:2022, rating:7.8, genre:"Action, Crime", img:"https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg" },
+  { title:"Top Gun: Maverick", year:2022, rating:8.2, genre:"Action, Drama", img:"https://image.tmdb.org/t/p/w500/62HCnUTziyWcpDaBO2i1DX17ljH.jpg" },
+  { title:"Avatar: The Way of Water", year:2022, rating:7.6, genre:"Sci-Fi, Adventure", img:"https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg" },
+  { title:"Everything Everywhere All at Once", year:2022, rating:7.8, genre:"Action, Comedy", img:"https://image.tmdb.org/t/p/w500/w3LxiVYdWWRvEVdn5RYq6jIqkb1.jpg" },
+  { title:"Interstellar", year:2014, rating:8.4, genre:"Sci-Fi, Drama", img:"https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" },
+  { title:"The Dark Knight", year:2008, rating:8.5, genre:"Action, Crime", img:"https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg" }
 ];
 
 const topSeries = [
-  { title:"Doctor X: Age of the White Mafia", year:2026, rating:9.5, eps:9,  genre:"Drama, Mystery" },
-  { title:"The Remarried Empress",            year:2026, rating:9.5, eps:4,  genre:"Drama, Fantasy" },
-  { title:"Dead-End Job",                     year:2026, rating:9.2, eps:8,  genre:"Drama, Horror" },
-  { title:"When I Meet the Moon",             year:2026, rating:9.3, eps:8,  genre:"Drama, Romance" },
-  { title:"Where the Mask Ends",              year:2026, rating:9.3, eps:30, genre:"Drama, Romance" },
-  { title:"Love in Disguise",                 year:2026, rating:9.2, eps:6,  genre:"Comedy, Mystery" },
-  { title:"Make Me Tingle",                   year:2026, rating:9.1, eps:10, genre:"Drama, Comedy" },
-  { title:"100 Days of Lies",                 year:2026, rating:9.3, eps:8,  genre:"Action, Crime" }
+  { title:"Breaking Bad", year:2008, rating:8.9, eps:62, genre:"Crime, Drama", img:"https://image.tmdb.org/t/p/w500/ggFHVNu6YYI5L9pCfOacjizRGt.jpg" },
+  { title:"Stranger Things", year:2016, rating:8.6, eps:42, genre:"Sci-Fi, Horror", img:"https://image.tmdb.org/t/p/w500/49WJfeN0moxb9IPfGn8AIqMGskD.jpg" },
+  { title:"Game of Thrones", year:2011, rating:8.4, eps:73, genre:"Fantasy, Drama", img:"https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg" },
+  { title:"The Last of Us", year:2023, rating:8.7, eps:9, genre:"Drama, Horror", img:"https://image.tmdb.org/t/p/w500/uKvVjHNqB5VmOrdxqAt2F7J78ED.jpg" },
+  { title:"Wednesday", year:2022, rating:8.1, eps:8, genre:"Comedy, Fantasy", img:"https://image.tmdb.org/t/p/w500/9PFonBhy4cQy7Jz20NpMygczOkv.jpg" },
+  { title:"The Bear", year:2022, rating:8.4, eps:28, genre:"Drama, Comedy", img:"https://image.tmdb.org/t/p/w500/sHFlbKS3WLqMnp9t2ghADIJFnuQ.jpg" },
+  { title:"Succession", year:2018, rating:8.3, eps:39, genre:"Drama, Comedy", img:"https://image.tmdb.org/t/p/w500/7HW47XbkNQ5fiwQFYGWdw9gs144.jpg" },
+  { title:"The Witcher", year:2019, rating:7.9, eps:24, genre:"Fantasy, Action", img:"https://image.tmdb.org/t/p/w500/7vjaCdMw15FEbXyLQTVa04URsPm.jpg" }
 ];
 
 const seriesUpdate = [
-  { title:"Tunnel",             year:2019, rating:6.7, eps:15, genre:"Crime, Mystery" },
-  { title:"Hell Home",          year:2026, rating:7.3, eps:8,  genre:"Drama, Horror" },
-  { title:"9-1-1: Nashville",   year:2025, rating:5.6, eps:4,  genre:"Action, Drama" },
-  { title:"9-1-1",              year:2018, rating:7.8, eps:4,  genre:"Action, Drama" },
-  { title:"Let's Go",           year:2026, rating:8.5, eps:14, genre:"Drama, Comedy" },
-  { title:"Family Register",    year:2026, rating:8.2, eps:70, genre:"Drama, Family" },
-  { title:"Sunshine Through the Rain", year:2026, rating:9.4, eps:6, genre:"Drama, Romance" },
-  { title:"Tigers Sniff the Rose",     year:2026, rating:9.0, eps:31, genre:"Drama, Romance" }
+  { title:"House of the Dragon", year:2022, rating:8.4, eps:18, genre:"Fantasy, Drama", img:"https://image.tmdb.org/t/p/w500/z2yahl2uefxDCl0nogcRBstwruJ.jpg" },
+  { title:"The Boys", year:2019, rating:8.4, eps:32, genre:"Action, Comedy", img:"https://image.tmdb.org/t/p/w500/2zmTngn1tYC1AvfnrFLhxeD82hz.jpg" },
+  { title:"Loki", year:2021, rating:8.1, eps:12, genre:"Sci-Fi, Adventure", img:"https://image.tmdb.org/t/p/w500/voHUmluYmKyleFkTu3lOXQG702u.jpg" },
+  { title:"The Mandalorian", year:2019, rating:8.6, eps:24, genre:"Sci-Fi, Action", img:"https://image.tmdb.org/t/p/w500/eU1i6eHXlzMOlEq0ku1Rzq7Y4wA.jpg" },
+  { title:"Money Heist", year:2017, rating:8.2, eps:41, genre:"Crime, Thriller", img:"https://image.tmdb.org/t/p/w500/reEMJA1uzscCbkpeRJeTT2bjqUp.jpg" },
+  { title:"Squid Game", year:2021, rating:8.0, eps:9, genre:"Thriller, Drama", img:"https://image.tmdb.org/t/p/w500/dDlEmu3EZ0Pgg93K2SVNLCjCSvE.jpg" },
+  { title:"Peacemaker", year:2022, rating:8.3, eps:8, genre:"Action, Comedy", img:"https://image.tmdb.org/t/p/w500/hE3LRZAY84fG19a18pzpkZERjTE.jpg" },
+  { title:"Euphoria", year:2019, rating:8.3, eps:16, genre:"Drama", img:"https://image.tmdb.org/t/p/w500/3Q0lgZI2yVHXpZnC5r0Q6CqY3pQ.jpg" }
 ];
 
 const topMonth = [
-  { title:"Apocalypse Z: New World", year:2026, rating:8.0, hd:1, genre:"Drama, Horror" },
-  { title:"Resident Evil",           year:2026, rating:7.8, hd:1, genre:"Action, Sci-Fi" },
-  { title:"Spider-Man: Brand New Day", year:2026, rating:8.0, hd:1, genre:"Action, Adventure" },
-  { title:"Beware Boiuna",           year:2026, rating:6.1, hd:1, genre:"Action, Thriller" },
-  { title:"Masterplan",              year:2026, rating:9.0, hd:1, genre:"Action, Comedy" },
-  { title:"Drive - The Pretenders",  year:2026, rating:6.4, hd:1, genre:"Drama, Romance" },
-  { title:"Heart of the Beast",      year:2026, rating:7.2, hd:1, genre:"Action, Drama" },
-  { title:"Savage Mountain",         year:2026, rating:7.9, hd:1, genre:"Documentary" }
+  { title:"Deadpool & Wolverine", year:2024, rating:7.7, genre:"Action, Comedy", img:"https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg" },
+  { title:"Inside Out 2", year:2024, rating:7.6, genre:"Animation, Family", img:"https://image.tmdb.org/t/p/w500/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg" },
+  { title:"Furiosa", year:2024, rating:7.6, genre:"Action, Adventure", img:"https://image.tmdb.org/t/p/w500/iADOJ8Zymht2JPMoy3R7xceZprc.jpg" },
+  { title:"Kingdom of the Planet of the Apes", year:2024, rating:7.1, genre:"Sci-Fi, Action", img:"https://image.tmdb.org/t/p/w500/gKkl37BQuKTanygYQG1pyYgLVgf.jpg" },
+  { title:"Godzilla x Kong", year:2024, rating:6.5, genre:"Action, Sci-Fi", img:"https://image.tmdb.org/t/p/w500/z1p34vh7dEOnLDmyCrlUVLuoDzd.jpg" },
+  { title:"Gladiator II", year:2024, rating:7.2, genre:"Action, Drama", img:"https://image.tmdb.org/t/p/w500/2cxhvwyEwRlysAmRH4iodkvo0z5.jpg" },
+  { title:"Wicked", year:2024, rating:7.4, genre:"Musical, Fantasy", img:"https://image.tmdb.org/t/p/w500/c5Tqxeo1UpBvnAc3csUm7xjB5EX.jpg" },
+  { title:"Venom: The Last Dance", year:2024, rating:6.4, genre:"Action, Sci-Fi", img:"https://image.tmdb.org/t/p/w500/aosm8NMQ3UyoBVpSxyimorCQykC.jpg" }
 ];
 
-/* ========== CARD RENDER ========== */
+/* ============ HERO DATA ============ */
+const heroMovies = [
+  {
+    title:'Spider-Man: No Way Home',
+    year:2021, rating:8.2, duration:'2j 28m',
+    genre:['Action','Adventure','Sci-Fi'],
+    synopsis:'Setelah identitasnya terungkap, Peter Parker meminta bantuan Doctor Strange. Namun sihirnya salah dan membuka multiverse yang berbahaya bagi semua orang.',
+    backdrop:'https://image.tmdb.org/t/p/original/14QbnygCuTO0vl7CAFmPf1fgZfV.jpg',
+    poster:'https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg',
+    badge:'FILM TERBARU'
+  },
+  {
+    title:'John Wick: Chapter 4',
+    year:2023, rating:7.7, duration:'2j 49m',
+    genre:['Action','Thriller','Crime'],
+    synopsis:'John Wick menghadapi musuh baru di seluruh dunia, dengan hadiah buronan yang semakin tinggi. Ia harus bertarung melawan The High Table untuk meraih kebebasan.',
+    backdrop:'https://image.tmdb.org/t/p/original/7I6VUdPj6tQECNHdviJkUHD2u89.jpg',
+    poster:'https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg',
+    badge:'TOP RATING'
+  },
+  {
+    title:'Oppenheimer',
+    year:2023, rating:8.1, duration:'3j 0m',
+    genre:['Biography','Drama','History'],
+    synopsis:'Kisah J. Robert Oppenheimer, ilmuwan yang memimpin proyek Manhattan untuk menciptakan bom atom pertama dalam sejarah umat manusia.',
+    backdrop:'https://image.tmdb.org/t/p/original/fm6KqXpk3M2HVveHwCrBSSBaO0V.jpg',
+    poster:'https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg',
+    badge:'WINNER OSCAR'
+  },
+  {
+    title:'Dune: Part Two',
+    year:2024, rating:8.5, duration:'2j 46m',
+    genre:['Action','Adventure','Sci-Fi'],
+    synopsis:'Paul Atreides bersatu dengan Chani dan Fremen untuk membalas dendam terhadap konspirasi yang menghancurkan keluarganya.',
+    backdrop:'https://image.tmdb.org/t/p/original/xOMo8BRK7PfcJv9JCnx7s5hj0PX.jpg',
+    poster:'https://image.tmdb.org/t/p/w500/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg',
+    badge:'MUST WATCH'
+  },
+  {
+    title:'The Batman',
+    year:2022, rating:7.8, duration:'2j 56m',
+    genre:['Action','Crime','Mystery'],
+    synopsis:'Batman mengejar Riddler, pembunuh berantai yang menargetkan elite Gotham. Ia harus mengungkap korupsi yang melibatkan keluarganya sendiri.',
+    backdrop:'https://image.tmdb.org/t/p/original/b0PlSFdDwbyK0cf5RxwDpaOJQvQ.jpg',
+    poster:'https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg',
+    badge:'NOIR'
+  }
+];
+
+/* ============ CARD RENDER ============ */
 const STAR = `<svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg>`;
 
-function cardHTML(item, i){
-  const img = IMG(`${item.title.replace(/\s+/g,'')}${i}`);
-  const epsBadge = item.eps ? `<span class="badge episode">EPS ${item.eps}</span>` : '';
-  const hdBadge  = item.hd  ? `<span class="badge hd">HD</span>` : '';
+function cardHTML(item){
+  const epsBadge = item.eps ? `<span class="badge episode">EPS ${item.eps}</span>` : `<span class="badge hd">HD</span>`;
   return `
-    <li class="slider">
-      <article class="movie-card">
-        <a href="#">
-          <div class="poster">
-            <img src="${img}" alt="${item.title}" loading="lazy" width="200" height="300">
-            <div class="poster-overlay"></div>
-            <span class="badge rating">${STAR} ${item.rating}</span>
-            <span class="badge year">${item.year}</span>
-            ${hdBadge}${epsBadge}
-          </div>
-          <div class="movie-info">
-            <div class="genre">${item.genre}</div>
-            <h3 class="title">${item.title}</h3>
-          </div>
-        </a>
-      </article>
+    <li class="movie-card">
+      <a href="#">
+        <div class="poster">
+          <img src="${item.img}" alt="${item.title}" loading="lazy" width="200" height="300">
+          <div class="poster-overlay"></div>
+          <span class="badge rating">${STAR} ${item.rating}</span>
+          <span class="badge year">${item.year}</span>
+          ${epsBadge}
+        </div>
+        <div class="movie-info">
+          <div class="genre">${item.genre}</div>
+          <h3 class="title">${item.title}</h3>
+        </div>
+      </a>
     </li>`;
 }
 
@@ -750,13 +952,80 @@ function render(containerId, data){
   el.innerHTML = data.map(cardHTML).join('');
 }
 
-render('heroSlider',    heroData);
 render('latestMovies',  latestMovies);
 render('topSeries',     topSeries);
 render('seriesUpdate',  seriesUpdate);
 render('topMonth',      topMonth);
 
-/* ========== SLIDER CONTROL ========== */
+/* ============ HERO CINEMATIC ============ */
+let heroIndex = 0;
+let heroTimer;
+
+function renderHero(){
+  const container = document.getElementById('heroSlides');
+  if(!container) return;
+
+  container.innerHTML = heroMovies.map((m, i) => `
+    <div class="hero-slide ${i === 0 ? 'active' : ''}" data-index="${i}">
+      <div class="hero-backdrop" style="background-image:url('${m.backdrop}')"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-poster">
+          <img src="${m.poster}" alt="${m.title}" loading="lazy">
+        </div>
+        <div class="hero-info">
+          <span class="hero-badge">⭐ ${m.badge}</span>
+          <h1 class="hero-title">${m.title}</h1>
+          <div class="hero-meta">
+            <span class="star">★ ${m.rating}</span>
+            <span class="dot"></span>
+            <span>${m.year}</span>
+            <span class="dot"></span>
+            <span>${m.duration}</span>
+            <span class="dot"></span>
+            ${m.genre.map(g => `<span class="tag">${g}</span>`).join('')}
+          </div>
+          <p class="hero-synopsis">${m.synopsis}</p>
+          <div class="hero-actions">
+            <a href="#" class="hero-btn primary">▶ Tonton Sekarang</a>
+            <a href="#" class="hero-btn secondary">+ Watchlist</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  const dots = document.getElementById('heroDots');
+  dots.innerHTML = heroMovies.map((_, i) =>
+    `<button class="hero-dot ${i === 0 ? 'active' : ''}" data-i="${i}" aria-label="Slide ${i+1}"></button>`
+  ).join('');
+
+  dots.querySelectorAll('.hero-dot').forEach(dot => {
+    dot.addEventListener('click', () => goToHero(parseInt(dot.dataset.i)));
+  });
+
+  document.getElementById('heroPrev').addEventListener('click', () => goToHero(heroIndex - 1));
+  document.getElementById('heroNext').addEventListener('click', () => goToHero(heroIndex + 1));
+
+  startHeroTimer();
+}
+
+function goToHero(i){
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots = document.querySelectorAll('.hero-dot');
+  if(!slides.length) return;
+  heroIndex = (i + slides.length) % slides.length;
+  slides.forEach((s, idx) => s.classList.toggle('active', idx === heroIndex));
+  dots.forEach((d, idx) => d.classList.toggle('active', idx === heroIndex));
+  startHeroTimer();
+}
+
+function startHeroTimer(){
+  clearInterval(heroTimer);
+  heroTimer = setInterval(() => goToHero(heroIndex + 1), 7000);
+}
+
+/* ============ SLIDER CONTROL ============ */
 document.querySelectorAll('.slider-wrapper').forEach(wrapper => {
   const list = wrapper.querySelector('.sliders');
   const left = wrapper.querySelector('.scroll-left');
@@ -778,7 +1047,7 @@ document.querySelectorAll('.slider-wrapper').forEach(wrapper => {
   update();
 });
 
-/* ========== MOBILE NAV ========== */
+/* ============ MOBILE NAV ============ */
 const mobileNav = document.getElementById('mobileNav');
 document.getElementById('openNav').addEventListener('click', () => {
   mobileNav.classList.add('open');
@@ -789,9 +1058,19 @@ document.getElementById('closeNav').addEventListener('click', () => {
   document.body.style.overflow = '';
 });
 
-/* ========== WATCH BAR TOGGLE ========== */
+/* ============ WATCH BAR TOGGLE ============ */
 document.getElementById('watchToggle').addEventListener('click', () => {
   document.getElementById('watchWrapper').classList.toggle('open');
+});
+
+/* ============ INIT HERO ============ */
+document.addEventListener('DOMContentLoaded', () => {
+  renderHero();
+  const hero = document.querySelector('.hero');
+  if(hero){
+    hero.addEventListener('mouseenter', () => clearInterval(heroTimer));
+    hero.addEventListener('mouseleave', startHeroTimer);
+  }
 });
 </script>
 </body>
