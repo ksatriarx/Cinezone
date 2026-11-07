@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CineZone — Nonton Film & Series Streaming Sub Indo</title>
+<meta name="description" content="CineZone — Streaming film dan series terbaru sub Indo kualitas HD. Drama Korea, anime, film barat & Asia lengkap.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23a70836'/><polygon points='35,25 75,50 35,75' fill='white'/></svg>">
+<style>
+:root{
+  --bg:#0d0d12;
+  --bg-alt:#14141c;
+  --card:#1a1a24;
+  --card-hover:#232332;
+  --accent:#a70836;
+  --accent-2:#e01050;
+  --text:#f2f2f7;
+  --text-dim:#9a9aad;
+  --border:#26263a;
+  --radius:10px;
+  --shadow:0 6px 20px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.5;
+  overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+ul{list-style:none}
+
+/* ============ LAYOUT ============ */
+.container{max-width:1280px;margin:0 auto;padding:0 16px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ============ HEADER ============ */
+.main-header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(13,13,18,.94);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.navbar{
+  display:flex;align-items:center;gap:24px;
+  height:64px;
+}
+.nav-brand{
+  display:flex;align-items:center;gap:8px;
+  font-weight:800;font-size:1.25rem;letter-spacing:.5px;
+  color:#fff;flex-shrink:0;
+}
+.nav-brand .logo-mark{
+  width:32px;height:32px;border-radius:8px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:grid;place-items:center;
+}
+.nav-brand .logo-mark svg{width:18px;height:18px}
+.nav-brand span b{color:var(--accent-2)}
+
+.form-search{flex:1;max-width:420px}
+.input-group{
+  display:flex;background:var(--bg-alt);
+  border:1px solid var(--border);border-radius:999px;overflow:hidden;
+  transition:border-color .2s;
+}
+.input-group:focus-within{border-color:var(--accent-2)}
+.search-input{
+  flex:1;background:none;border:none;outline:none;
+  padding:10px 18px;color:var(--text);font-size:.9rem;
+}
+.search-input::placeholder{color:var(--text-dim)}
+.input-group button{
+  padding:0 18px;color:var(--text-dim);
+  display:grid;place-items:center;transition:color .2s;
+}
+.input-group button:hover{color:var(--accent-2)}
+
+.navbar-nav{display:flex;align-items:center;gap:4px;margin-left:auto}
+.navbar-nav>li{position:relative}
+.navbar-nav>li>a{
+  display:flex;align-items:center;gap:6px;
+  padding:10px 14px;border-radius:8px;
+  font-size:.88rem;font-weight:600;color:var(--text-dim);
+  transition:.2s;
+}
+.navbar-nav>li>a:hover{color:#fff;background:var(--card)}
+
+.dropdown-menu{
+  position:absolute;top:calc(100% + 6px);left:0;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:14px;min-width:200px;
+  opacity:0;visibility:hidden;transform:translateY(6px);
+  transition:.18s;z-index:200;
+}
+.navbar-nav>li:hover .dropdown-menu{opacity:1;visibility:visible;transform:translateY(0)}
+.dropdown-menu ul li a{
+  display:block;padding:7px 10px;border-radius:6px;
+  font-size:.85rem;color:var(--text-dim);transition:.15s;
+}
+.dropdown-menu ul li a:hover{background:var(--accent);color:#fff}
+.dropdown-menu.right{left:auto;right:0}
+.menu-2-col{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+
+/* Mobile nav */
+.mobile-toggle{display:none;color:#fff;padding:8px}
+.mobile-nav{
+  position:fixed;inset:0;z-index:300;
+  background:var(--bg);transform:translateX(-100%);
+  transition:transform .3s ease;overflow-y:auto;
+  padding:20px;
+}
+.mobile-nav.open{transform:translateX(0)}
+.mobile-nav .close-btn{font-size:1.5rem;color:#fff;margin-bottom:20px}
+.mobile-nav .form-search{max-width:100%;margin-bottom:20px}
+.mobile-nav ul li{margin-bottom:4px}
+.mobile-nav .menu-title{
+  display:block;padding:12px;font-weight:700;color:#fff;
+  border-bottom:1px solid var(--border);
+}
+.mobile-submenu{padding-left:14px}
+.mobile-submenu a{display:block;padding:9px 12px;color:var(--text-dim);font-size:.9rem}
+
+/* ============ SUB NAV (genre chips) ============ */
+.sub-header{
+  background:var(--bg-alt);border-bottom:1px solid var(--border);
+  overflow-x:auto;
+}
+.scroll-nav{display:flex;gap:6px;padding:10px 0;white-space:nowrap}
+.scroll-nav a{
+  padding:7px 16px;border-radius:999px;
+  font-size:.78rem;font-weight:700;letter-spacing:.4px;
+  color:var(--text-dim);background:var(--card);
+  transition:.2s;
+}
+.scroll-nav a:hover{background:var(--accent);color:#fff}
+
+/* ============ HERO SLIDER ============ */
+.featured{padding:28px 0 8px}
+.slider-wrapper{position:relative}
+.sliders{
+  display:flex;gap:14px;overflow-x:auto;scroll-behavior:smooth;
+  padding-bottom:8px;scrollbar-width:none;
+}
+.sliders::-webkit-scrollbar{display:none}
+
+.slider-wrapper.hero .slider{flex:0 0 46%;max-width:46%}
+@media(min-width:900px){.slider-wrapper.hero .slider{flex:0 0 23%;max-width:23%}}
+@media(max-width:640px){.slider-wrapper.hero .slider{flex:0 0 70%;max-width:70%}}
+
+.scroll-btn{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(10,10,15,.8);border:1px solid var(--border);
+  color:#fff;display:grid;place-items:center;
+  font-size:1.1rem;z-index:5;transition:.2s;
+}
+.scroll-btn:hover{background:var(--accent)}
+.scroll-btn.scroll-left{left:-14px}
+.scroll-btn.scroll-right{right:-14px}
+.scroll-btn.hidden{opacity:0;visibility:hidden}
+
+/* ============ MOVIE CARD ============ */
+.movie-card{position:relative}
+.movie-card .poster{
+  position:relative;border-radius:var(--radius);
+  overflow:hidden;aspect-ratio:2/3;background:var(--card);
+  box-shadow:var(--shadow);
+}
+.movie-card .poster img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .35s ease;
+}
+.movie-card:hover .poster img{transform:scale(1.06)}
+.poster-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,.85) 0%,transparent 45%);
+  opacity:.9;transition:.3s;
+}
+.movie-card:hover .poster-overlay{opacity:1}
+
+.badge{
+  position:absolute;padding:3px 8px;border-radius:6px;
+  font-size:.68rem;font-weight:700;letter-spacing:.3px;
+  display:flex;align-items:center;gap:4px;
+}
+.badge.rating{top:8px;left:8px;background:rgba(0,0,0,.72);color:#ffd233}
+.badge.rating svg{width:10px;height:10px;fill:#ffd233}
+.badge.year{top:8px;right:8px;background:rgba(167,8,54,.9);color:#fff}
+.badge.hd{bottom:8px;left:8px;background:var(--accent);color:#fff;font-size:.62rem}
+.badge.episode{bottom:8px;right:8px;background:rgba(0,0,0,.72);color:#fff;font-size:.62rem}
+
+.movie-info{padding:10px 4px 0}
+.movie-info .genre{font-size:.72rem;color:var(--accent-2);font-weight:600;margin-bottom:2px;text-transform:uppercase;letter-spacing:.3px}
+.movie-info .title{
+  font-size:.86rem;font-weight:600;color:var(--text);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;line-height:1.3;
+}
+
+/* ============ SECTION ============ */
+.widget{margin:36px 0}
+.widget .header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;
+}
+.widget .header h2{
+  font-size:1.15rem;font-weight:800;letter-spacing:.4px;
+  position:relative;padding-left:14px;
+}
+.widget .header h2::before{
+  content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:5px;height:22px;border-radius:3px;
+  background:linear-gradient(var(--accent),var(--accent-2));
+}
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--accent);color:#fff;
+  padding:9px 18px;border-radius:8px;
+  font-size:.8rem;font-weight:700;letter-spacing:.4px;
+  transition:.2s;
+}
+.btn:hover{background:var(--accent-2)}
+.btn-small{padding:7px 14px;font-size:.72rem}
+.btn-secondary{background:var(--card);color:var(--text-dim)}
+.btn-secondary:hover{background:var(--card-hover);color:#fff}
+
+/* ============ CONTINUE WATCHING BAR ============ */
+.watch-bar{
+  background:var(--bg-alt);border:1px solid var(--border);
+  border-radius:var(--radius);margin:16px 0;overflow:hidden;
+}
+.watch-bar-toggle{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;font-weight:700;font-size:.9rem;
+}
+.watch-bar-toggle:hover{background:var(--card)}
+.watch-bar-toggle::after{content:"▾";color:var(--text-dim)}
+.watch-wrapper{padding:0 18px 18px;display:none}
+.watch-wrapper.open{display:block}
+.watch-empty{text-align:center;color:var(--text-dim);padding:24px;font-size:.85rem}
+
+/* ============ FILTER ============ */
+.filter-menu{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px;margin-bottom:20px;
+}
+.form-filter{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.form-group select{
+  width:100%;padding:10px 14px;border-radius:8px;
+  background:var(--bg-alt);border:1px solid var(--border);
+  color:var(--text);font-size:.85rem;outline:none;
+}
+.form-group select:focus{border-color:var(--accent-2)}
+.filter-actions{display:flex;gap:10px;margin-top:14px}
+
+/* ============ FOOTER ============ */
+.site-footer{
+  background:var(--bg-alt);border-top:1px solid var(--border);
+  margin-top:60px;padding:40px 0 24px;
+}
+.footer-grid{
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:30px;
+}
+@media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr;gap:24px}}
+.footer-brand p{color:var(--text-dim);font-size:.85rem;margin-top:12px;max-width:320px}
+.footer-col h4{font-size:.85rem;font-weight:700;margin-bottom:14px;color:#fff}
+.footer-col ul li{margin-bottom:8px}
+.footer-col ul li a{color:var(--text-dim);font-size:.82rem;transition:.2s}
+.footer-col ul li a:hover{color:var(--accent-2)}
+.footer-bottom{
+  border-top:1px solid var(--border);margin-top:32px;padding-top:20px;
+  text-align:center;color:var(--text-dim);font-size:.78rem;
+}
+.social-row{display:flex;gap:10px;margin-top:16px}
+.social-row a{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--card);display:grid;place-items:center;
+  color:var(--text-dim);font-size:.9rem;transition:.2s;
+}
+.social-row a:hover{background:var(--accent);color:#fff}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:900px){
+  .navbar-nav,.form-search.desk{display:none}
+  .mobile-toggle{display:block}
+  .navbar{gap:14px}
+}
+@media(max-width:520px){
+  .widget .header h2{font-size:1rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ MOBILE NAV ============ -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="close-btn" id="closeNav" aria-label="Tutup menu">✕</button>
+  <form class="form-search" onsubmit="return false">
+    <div class="input-group">
+      <input class="search-input" type="text" placeholder="Cari judul film...">
+      <button type="submit" aria-label="Cari">🔍</button>
+    </div>
+  </form>
+  <ul>
+    <li><a class="menu-title" href="#">🏠 HOME</a></li>
+    <li><span class="menu-title">🎬 GENRE</span>
+      <div class="mobile-submenu">
+        <a href="#">Action</a><a href="#">Adventure</a><a href="#">Animation</a>
+        <a href="#">Comedy</a><a href="#">Crime</a><a href="#">Drama</a>
+        <a href="#">Fantasy</a><a href="#">Horror</a><a href="#">Romance</a>
+        <a href="#">Sci-Fi</a><a href="#">Thriller</a><a href="#">War</a>
+      </div>
+    </li>
+    <li><span class="menu-title">🌏 NEGARA</span>
+      <div class="mobile-submenu">
+        <a href="#">Amerika</a><a href="#">Australia</a><a href="#">Cina</a>
+        <a href="#">India</a><a href="#">Inggris</a><a href="#">Jepang</a>
+        <a href="#">Korea</a><a href="#">Malaysia</a><a href="#">Thailand</a>
+      </div>
+    </li>
+    <li><span class="menu-title">📅 TAHUN</span>
+      <div class="mobile-submenu">
+        <a href="#">2026</a><a href="#">2025</a><a href="#">2024</a>
+        <a href="#">2023</a><a href="#">2022</a><a href="#">2021</a>
+        <a href="#">2020</a><a href="#">2019</a>
+      </div>
+    </li>
+    <li><a class="menu-title" href="#">⭐ TERPOPULER</a></li>
+    <li><a class="menu-title" href="#">🔥 REKOMENDASI</a></li>
+  </ul>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="main-header">
+  <div class="container">
+    <nav class="navbar">
+      <a href="#" class="nav-brand">
+        <span class="logo-mark">
+          <svg viewBox="0 0 24 24" fill="white"><polygon points="8,5 19,12 8,19"/></svg>
+        </span>
+        <span>Cine<b>Zone</b></span>
+      </a>
+      <form class="form-search desk" onsubmit="return false">
+        <div class="input-group">
+          <input class="search-input" type="text" placeholder="Cari judul film...">
+          <button type="submit" aria-label="Cari">🔍</button>
+        </div>
+      </form>
+      <ul class="navbar-nav">
+        <li>
+          <a href="#">🎬 Genre</a>
+          <div class="dropdown-menu">
+            <div class="menu-2-col">
+              <ul>
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Adventure</a></li>
+                <li><a href="#">Animation</a></li>
+                <li><a href="#">Comedy</a></li>
+                <li><a href="#">Crime</a></li>
+              </ul>
+              <ul>
+                <li><a href="#">Drama</a></li>
+                <li><a href="#">Fantasy</a></li>
+                <li><a href="#">Horror</a></li>
+                <li><a href="#">Romance</a></li>
+                <li><a href="#">Thriller</a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <a href="#">📺 Series</a>
+          <div class="dropdown-menu">
+            <ul>
+              <li><a href="#">Daftar Series</a></li>
+              <li><a href="#">Series Terbaru</a></li>
+              <li><a href="#">Ongoing</a></li>
+              <li><a href="#">Complete</a></li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <a href="#">⭐ Populer</a>
+          <div class="dropdown-menu">
+            <ul>
+              <li><a href="#">Terpopuler</a></li>
+              <li><a href="#">Rating Tertinggi</a></li>
+              <li><a href="#">Komen Terbanyak</a></li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <a href="#">🌏 Negara</a>
+          <div class="dropdown-menu right">
+            <div class="menu-2-col">
+              <ul>
+                <li><a href="#">Amerika</a></li>
+                <li><a href="#">Inggris</a></li>
+                <li><a href="#">Jepang</a></li>
+                <li><a href="#">Korea</a></li>
+                <li><a href="#">China</a></li>
+              </ul>
+              <ul>
+                <li><a href="#">India</a></li>
+                <li><a href="#">Thailand</a></li>
+                <li><a href="#">Malaysia</a></li>
+                <li><a href="#">Rusia</a></li>
+                <li><a href="#">Australia</a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <a href="#">📅 Tahun</a>
+          <div class="dropdown-menu right">
+            <div class="menu-2-col">
+              <ul>
+                <li><a href="#">2026</a></li>
+                <li><a href="#">2025</a></li>
+                <li><a href="#">2024</a></li>
+                <li><a href="#">2023</a></li>
+                <li><a href="#">2022</a></li>
+              </ul>
+              <ul>
+                <li><a href="#">2021</a></li>
+                <li><a href="#">2020</a></li>
+                <li><a href="#">2019</a></li>
+                <li><a href="#">2018</a></li>
+                <li><a href="#">2017</a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <button class="mobile-toggle" id="openNav" aria-label="Buka menu">☰</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ SUB NAV ============ -->
+<div class="sub-header">
+  <div class="container">
+    <div class="scroll-nav">
+      <a href="#">ACTION</a>
+      <a href="#">ANIME</a>
+      <a href="#">HORROR</a>
+      <a href="#">KOMEDI</a>
+      <a href="#">SCI-FI</a>
+      <a href="#">ROMANCE</a>
+      <a href="#">CINA</a>
+      <a href="#">INDIA</a>
+      <a href="#">JEPANG</a>
+      <a href="#">KOREA</a>
+      <a href="#">THAILAND</a>
+      <a href="#">BLURAY</a>
+      <a href="#">2025</a>
+      <a href="#">2026</a>
+      <a href="#">TERPOPULER</a>
+    </div>
+  </div>
+</div>
+
+<main class="site-content">
+  <!-- ============ HERO / FEATURED ============ -->
+  <section class="featured">
+    <div class="container">
+      <div class="widget header" style="margin-top:0;margin-bottom:14px">
+        <h2>Film Unggulan</h2>
+        <a href="#" class="btn btn-small">LIHAT SEMUA</a>
+      </div>
+      <div class="slider-wrapper hero">
+        <button class="scroll-btn scroll-left hidden" aria-label="Kiri">❮</button>
+        <button class="scroll-btn scroll-right" aria-label="Kanan">❯</button>
+        <ul class="sliders" id="heroSlider"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTINUE WATCHING ============ -->
+  <div class="container">
+    <div class="watch-bar">
+      <button class="watch-bar-toggle" id="watchToggle">Lanjutkan Menonton</button>
+      <div class="watch-wrapper" id="watchWrapper">
+        <div class="watch-empty">
+          Kamu belum punya daftar tontonan. Tambahkan film ke Watchlist untuk melanjutkan menonton di sini.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FILTER ============ -->
+  <div class="container">
+    <div class="widget" style="margin-top:20px">
+      <div class="header">
+        <h2>Filter Film</h2>
+      </div>
+      <div class="filter-menu">
+        <form class="form-filter" onsubmit="return false">
+          <div class="form-group">
+            <select>
+              <option>Urut Berdasarkan: Populer</option>
+              <option>Tahun Pembuatan</option>
+              <option>Rating IMDB</option>
+              <option>Tanggal Upload</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <select>
+              <option>Movie / Series</option>
+              <option>Movie</option>
+              <option>Series</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <select>
+              <option>Pilih Genre</option>
+              <option>Action</option><option>Adventure</option>
+              <option>Animation</option><option>Comedy</option>
+              <option>Drama</option><option>Horror</option>
+              <option>Romance</option><option>Sci-Fi</option>
+              <option>Thriller</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <select>
+              <option>Negara</option>
+              <option>United States</option><option>Japan</option>
+              <option>South Korea</option><option>China</option>
+              <option>India</option><option>United Kingdom</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <select>
+              <option>Tahun</option>
+              <option>2026</option><option>2025</option>
+              <option>2024</option><option>2023</option>
+              <option>2022</option>
+            </select>
+          </div>
+        </form>
+        <div class="filter-actions">
+          <button class="btn">Filter Film</button>
+          <button class="btn btn-secondary">Batal</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FILM TERBARU ============ -->
+  <div class="container">
+    <section class="widget">
+      <div class="header">
+        <h2>Film Terbaru</h2>
+        <a href="#" class="btn btn-small">SEMUA</a>
+      </div>
+      <div class="slider-wrapper">
+        <button class="scroll-btn scroll-left hidden" aria-label="Kiri">❮</button>
+        <button class="scroll-btn scroll-right" aria-label="Kanan">❯</button>
+        <ul class="sliders" id="latestMovies"></ul>
+      </div>
+    </section>
+
+    <!-- ============ SERIES UNGGULAN ============ -->
+    <section class="widget">
+      <div class="header">
+        <h2>Series Unggulan</h2>
+        <a href="#" class="btn btn-small">SEMUA</a>
+      </div>
+      <div class="slider-wrapper">
+        <button class="scroll-btn scroll-left hidden" aria-label="Kiri">❮</button>
+        <button class="scroll-btn scroll-right" aria-label="Kanan">❯</button>
+        <ul class="sliders" id="topSeries"></ul>
+      </div>
+    </section>
+
+    <!-- ============ SERIES UPDATE ============ -->
+    <section class="widget">
+      <div class="header">
+        <h2>Series Update</h2>
+        <a href="#" class="btn btn-small">SEMUA</a>
+      </div>
+      <div class="slider-wrapper">
+        <button class="scroll-btn scroll-left hidden" aria-label="Kiri">❮</button>
+        <button class="scroll-btn scroll-right" aria-label="Kanan">❯</button>
+        <ul class="sliders" id="seriesUpdate"></ul>
+      </div>
+    </section>
+
+    <!-- ============ TOP BULAN INI ============ -->
+    <section class="widget">
+      <div class="header">
+        <h2>Top Bulan Ini</h2>
+        <a href="#" class="btn btn-small">SEMUA</a>
+      </div>
+      <div class="slider-wrapper">
+        <button class="scroll-btn scroll-left hidden" aria-label="Kiri">❮</button>
+        <button class="scroll-btn scroll-right" aria-label="Kanan">❯</button>
+        <ul class="sliders" id="topMonth"></ul>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-brand">
+          <span class="logo-mark">
+            <svg viewBox="0 0 24 24" fill="white"><polygon points="8,5 19,12 8,19"/></svg>
+          </span>
+          <span>Cine<b>Zone</b></span>
+        </a>
+        <p>Streaming film dan series terbaru sub Indo kualitas HD. Drama Korea, anime, film barat &amp; Asia lengkap.</p>
+        <div class="social-row">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="Twitter">𝕏</a>
+          <a href="#" aria-label="Instagram">◉</a>
+          <a href="#" aria-label="Telegram">✈</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Jelajahi</h4>
+        <ul>
+          <li><a href="#">Terpopuler</a></li>
+          <li><a href="#">Rating Tertinggi</a></li>
+          <li><a href="#">Rekomendasi</a></li>
+          <li><a href="#">Post Terbaru</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Bantuan</h4>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Cara Install VPN</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">DMCA</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Komunitas</h4>
+        <ul>
+          <li><a href="#">Request Movie</a></li>
+          <li><a href="#">Diskusi</a></li>
+          <li><a href="#">Report Konten</a></li>
+          <li><a href="#">Kontak</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 CineZone. Template demo — semua konten fiktif untuk keperluan contoh.
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ========== DATA CONTOH ========== */
+const IMG = (seed) => `https://picsum.photos/seed/${seed}/400/600`;
+
+const heroData = [
+  { title:"Doctor X: Age of the White Mafia", year:2026, rating:9.5, eps:9,  genre:"Drama, Mystery" },
+  { title:"The Remarried Empress",            year:2026, rating:9.5, eps:4,  genre:"Drama, Fantasy" },
+  { title:"The Odyssey",                      year:2026, rating:7.7, hd:1,   genre:"Adventure, Drama" },
+  { title:"Dead-End Job",                     year:2026, rating:9.2, eps:8,  genre:"Horror, Mystery" },
+  { title:"Heart of the Beast",               year:2026, rating:7.2, hd:1,   genre:"Action, Drama" },
+  { title:"Resident Evil",                    year:2026, rating:7.8, hd:1,   genre:"Action, Sci-Fi" },
+  { title:"Apocalypse Z: New World",          year:2026, rating:8.0, hd:1,   genre:"Horror, Thriller" },
+  { title:"When I Meet the Moon",             year:2026, rating:9.3, eps:8,  genre:"Drama, Romance" }
+];
+
+const latestMovies = [
+  { title:"It's Nice in Here",   year:2022, rating:7.3, genre:"Animation, Short" },
+  { title:"Candle in the Tomb",  year:2023, rating:5.2, genre:"Action, Adventure" },
+  { title:"All Wishes Come True",year:2026, rating:8.0, genre:"Animation, Adventure" },
+  { title:"The Odyssey",         year:2026, rating:7.7, genre:"Drama, Adventure" },
+  { title:"Possible Love",       year:2026, rating:8.1, genre:"Drama, Romance" },
+  { title:"Musk",                year:2026, rating:7.4, genre:"Documentary" },
+  { title:"Sisa",                year:2025, rating:7.5, genre:"Drama, History" },
+  { title:"A Prayer for the Dying", year:2026, rating:6.1, genre:"Drama, Western" }
+];
+
+const topSeries = [
+  { title:"Doctor X: Age of the White Mafia", year:2026, rating:9.5, eps:9,  genre:"Drama, Mystery" },
+  { title:"The Remarried Empress",            year:2026, rating:9.5, eps:4,  genre:"Drama, Fantasy" },
+  { title:"Dead-End Job",                     year:2026, rating:9.2, eps:8,  genre:"Drama, Horror" },
+  { title:"When I Meet the Moon",             year:2026, rating:9.3, eps:8,  genre:"Drama, Romance" },
+  { title:"Where the Mask Ends",              year:2026, rating:9.3, eps:30, genre:"Drama, Romance" },
+  { title:"Love in Disguise",                 year:2026, rating:9.2, eps:6,  genre:"Comedy, Mystery" },
+  { title:"Make Me Tingle",                   year:2026, rating:9.1, eps:10, genre:"Drama, Comedy" },
+  { title:"100 Days of Lies",                 year:2026, rating:9.3, eps:8,  genre:"Action, Crime" }
+];
+
+const seriesUpdate = [
+  { title:"Tunnel",             year:2019, rating:6.7, eps:15, genre:"Crime, Mystery" },
+  { title:"Hell Home",          year:2026, rating:7.3, eps:8,  genre:"Drama, Horror" },
+  { title:"9-1-1: Nashville",   year:2025, rating:5.6, eps:4,  genre:"Action, Drama" },
+  { title:"9-1-1",              year:2018, rating:7.8, eps:4,  genre:"Action, Drama" },
+  { title:"Let's Go",           year:2026, rating:8.5, eps:14, genre:"Drama, Comedy" },
+  { title:"Family Register",    year:2026, rating:8.2, eps:70, genre:"Drama, Family" },
+  { title:"Sunshine Through the Rain", year:2026, rating:9.4, eps:6, genre:"Drama, Romance" },
+  { title:"Tigers Sniff the Rose",     year:2026, rating:9.0, eps:31, genre:"Drama, Romance" }
+];
+
+const topMonth = [
+  { title:"Apocalypse Z: New World", year:2026, rating:8.0, hd:1, genre:"Drama, Horror" },
+  { title:"Resident Evil",           year:2026, rating:7.8, hd:1, genre:"Action, Sci-Fi" },
+  { title:"Spider-Man: Brand New Day", year:2026, rating:8.0, hd:1, genre:"Action, Adventure" },
+  { title:"Beware Boiuna",           year:2026, rating:6.1, hd:1, genre:"Action, Thriller" },
+  { title:"Masterplan",              year:2026, rating:9.0, hd:1, genre:"Action, Comedy" },
+  { title:"Drive - The Pretenders",  year:2026, rating:6.4, hd:1, genre:"Drama, Romance" },
+  { title:"Heart of the Beast",      year:2026, rating:7.2, hd:1, genre:"Action, Drama" },
+  { title:"Savage Mountain",         year:2026, rating:7.9, hd:1, genre:"Documentary" }
+];
+
+/* ========== CARD RENDER ========== */
+const STAR = `<svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 9.2l7.1-.6z"/></svg>`;
+
+function cardHTML(item, i){
+  const img = IMG(`${item.title.replace(/\s+/g,'')}${i}`);
+  const epsBadge = item.eps ? `<span class="badge episode">EPS ${item.eps}</span>` : '';
+  const hdBadge  = item.hd  ? `<span class="badge hd">HD</span>` : '';
+  return `
+    <li class="slider">
+      <article class="movie-card">
+        <a href="#">
+          <div class="poster">
+            <img src="${img}" alt="${item.title}" loading="lazy" width="200" height="300">
+            <div class="poster-overlay"></div>
+            <span class="badge rating">${STAR} ${item.rating}</span>
+            <span class="badge year">${item.year}</span>
+            ${hdBadge}${epsBadge}
+          </div>
+          <div class="movie-info">
+            <div class="genre">${item.genre}</div>
+            <h3 class="title">${item.title}</h3>
+          </div>
+        </a>
+      </article>
+    </li>`;
+}
+
+function render(containerId, data){
+  const el = document.getElementById(containerId);
+  if(!el) return;
+  el.innerHTML = data.map(cardHTML).join('');
+}
+
+render('heroSlider',    heroData);
+render('latestMovies',  latestMovies);
+render('topSeries',     topSeries);
+render('seriesUpdate',  seriesUpdate);
+render('topMonth',      topMonth);
+
+/* ========== SLIDER CONTROL ========== */
+document.querySelectorAll('.slider-wrapper').forEach(wrapper => {
+  const list = wrapper.querySelector('.sliders');
+  const left = wrapper.querySelector('.scroll-left');
+  const right = wrapper.querySelector('.scroll-right');
+  if(!list || !left || !right) return;
+
+  const step = () => list.clientWidth * 0.8;
+
+  left.addEventListener('click', () => list.scrollBy({left: -step(), behavior:'smooth'}));
+  right.addEventListener('click', () => list.scrollBy({left: step(), behavior:'smooth'}));
+
+  const update = () => {
+    left.classList.toggle('hidden', list.scrollLeft <= 5);
+    right.classList.toggle('hidden',
+      list.scrollLeft + list.clientWidth >= list.scrollWidth - 5);
+  };
+  list.addEventListener('scroll', update);
+  window.addEventListener('resize', update);
+  update();
+});
+
+/* ========== MOBILE NAV ========== */
+const mobileNav = document.getElementById('mobileNav');
+document.getElementById('openNav').addEventListener('click', () => {
+  mobileNav.classList.add('open');
+  document.body.style.overflow = 'hidden';
+});
+document.getElementById('closeNav').addEventListener('click', () => {
+  mobileNav.classList.remove('open');
+  document.body.style.overflow = '';
+});
+
+/* ========== WATCH BAR TOGGLE ========== */
+document.getElementById('watchToggle').addEventListener('click', () => {
+  document.getElementById('watchWrapper').classList.toggle('open');
+});
+</script>
+</body>
+</html>
